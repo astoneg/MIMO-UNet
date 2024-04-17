@@ -57,7 +57,6 @@ class PairToTensor(transforms.ToTensor):
         """
         return F.to_tensor(pic), F.to_tensor(label)
 
-
 class PairPadding():
     def __call__(self, image, label):
         """ Pads images that have dimensions that are not divisble by 4 to ensure they are.
