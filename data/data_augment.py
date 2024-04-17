@@ -56,3 +56,34 @@ class PairToTensor(transforms.ToTensor):
             Tensor: Converted image.
         """
         return F.to_tensor(pic), F.to_tensor(label)
+
+
+class PairPadding():
+    def __call__(self, image, label):
+        """ Pads images that have dimensions that are not divisble by 4 to ensure they are.
+            Since MIMO-UNet downsamples the inputs, we need to ensure that the dimension allow for the downsampling.
+            Args:
+                img (PIL Image): Image to be padded.
+
+            Returns:
+                PIL Image: Image padded to ensure that dimensions are divisible by 4.
+            """
+        pixels_to_pad_col = 4 - (image.size[0]%4)
+        print(pixels_to_pad_col)
+        print(image.size)
+        pixels_to_pad_row = 4 - (image.size[1]%4)
+
+        if pixels_to_pad_col != 4:
+            image = F.pad(image, (pixels_to_pad_col, 0, 0, 0), padding_mode="edge")
+            label = F.pad(label, (pixels_to_pad_col, 0, 0, 0), padding_mode="edge")
+            print("col")
+            print(image.size)
+        if pixels_to_pad_row != 4:
+            image = F.pad(image, (0, pixels_to_pad_row, 0, 0), padding_mode="edge")
+            label = F.pad(label, (0, pixels_to_pad_row, 0, 0), padding_mode="edge")
+            print("row")
+            print(image.size)
+        print(image.size)
+        return image, label
+
+
