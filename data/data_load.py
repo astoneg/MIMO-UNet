@@ -2,7 +2,7 @@ import os
 import torch
 import numpy as np
 from PIL import Image as Image
-from data import PairCompose, PairRandomCrop, PairRandomHorizontalFilp, PairToTensor
+from data import PairCompose, PairRandomCrop, PairRandomHorizontalFilp, PairToTensor, PairPadding
 from torchvision.transforms import functional as F
 from torch.utils.data import Dataset, DataLoader
 
