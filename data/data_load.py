@@ -14,7 +14,7 @@ def train_dataloader(path, batch_size=64, num_workers=0, use_transform=True):
     if use_transform:
         transform = PairCompose(
             [
-                PairRandomCrop(256),
+                PairRandomCrop(224),
                 PairRandomHorizontalFilp(),
                 PairToTensor()
             ]
@@ -31,8 +31,14 @@ def train_dataloader(path, batch_size=64, num_workers=0, use_transform=True):
 
 def test_dataloader(path, batch_size=1, num_workers=0):
     image_dir = os.path.join(path, 'test')
+    transform = PairCompose(
+        [
+            PairPadding(),
+            PairToTensor()
+        ]
+    )
     dataloader = DataLoader(
-        DeblurDataset(image_dir, is_test=True),
+        DeblurDataset(image_dir, is_test=True, transform=transform),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
@@ -43,8 +49,14 @@ def test_dataloader(path, batch_size=1, num_workers=0):
 
 
 def valid_dataloader(path, batch_size=1, num_workers=0):
+    transform = PairCompose(
+        [
+            PairPadding(),
+            PairToTensor()
+        ]
+    )
     dataloader = DataLoader(
-        DeblurDataset(os.path.join(path, 'valid')),
+        DeblurDataset(os.path.join(path, 'valid'), transform=transform),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers
